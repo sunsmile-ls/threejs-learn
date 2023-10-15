@@ -42,6 +42,7 @@ scene.add(camera)
 //  ------ end line -----
 
 //  ------ line -----
+// 3. 产生炫酷三角形
 for (let i = 0; i < 50; i++) {
 	//每个三角形需要三个定点，每3个定点，需要三个值
 	const geometry = new THREE.BufferGeometry()
