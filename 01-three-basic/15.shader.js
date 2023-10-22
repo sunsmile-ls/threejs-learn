@@ -11,8 +11,6 @@ import deepVertexShader from './assets/shader/deep/vertex.glsl?raw'
 // 片元着色器
 import deepFragmentShader from './assets/shader/deep/fragment.glsl?raw'
 
-
-
 //创建gui对象
 const gui = new dat.GUI()
 
@@ -100,6 +98,7 @@ const clock = new THREE.Clock()
 function animate(t) {
 	const elapsedTime = clock.getElapsedTime()
 	//   console.log(elapsedTime);
+	shaderMaterial.uniforms.uTime.value = elapsedTime
 	requestAnimationFrame(animate)
 	// 使用渲染器渲染相机看这个场景的内容渲染出来
 	renderer.render(scene, camera)
