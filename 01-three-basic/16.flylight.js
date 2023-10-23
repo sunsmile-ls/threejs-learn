@@ -58,6 +58,26 @@ gltfLoader.load('./assets/flylight/model/flyLight.glb', gltf => {
 	console.log(gltf)
 	lightBox = gltf.scene.children[0]
 	lightBox.material = shaderMaterial
+	for (let i = 0; i < 150; i++) {
+		let flyLight = gltf.scene.clone(true)
+		let x = (Math.random() - 0.5) * 300
+		let z = (Math.random() - 0.5) * 300
+		let y = Math.random() * 60 + 25
+		flyLight.position.set(x, y, z)
+		gsap.to(flyLight.rotation, {
+			y: 2 * Math.PI,
+			duration: 10 + Math.random() * 30,
+			repeat: -1,
+		});
+		gsap.to(flyLight.position, {
+			x: "+=" + Math.random() * 5,
+			y: "+=" + Math.random() * 20,
+			yoyo: true,
+			duration: 5 + Math.random() * 10,
+			repeat: -1,
+		});
+		scene.add(flyLight)
+	}
 })
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer({ alpha: true })
