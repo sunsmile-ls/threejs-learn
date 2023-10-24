@@ -43,7 +43,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
 // 创建纹理加载器对象
 // 1. 加载环境纹理
 const rgbLoader = new RGBELoader()
-rgbLoader.loadAsync('./assets/flylight/2k.hdr').then(texture => {
+rgbLoader.loadAsync('./textures/flylight/2k.hdr').then(texture => {
 	// 圆柱反射映射,设置之后才可以旋转坐标轴跟随运动
 	texture.mapping = THREE.EquirectangularReflectionMapping
 	scene.background = texture
@@ -52,7 +52,7 @@ rgbLoader.loadAsync('./assets/flylight/2k.hdr').then(texture => {
 
 // 2. 孔明灯纹理
 const gltfLoader = new GLTFLoader()
-gltfLoader.load('./assets/flylight/model/flyLight.glb', gltf => {
+gltfLoader.load('./textures/flylight/model/flyLight.glb', gltf => {
 	let lightBox = null
 	scene.add(gltf.scene)
 	console.log(gltf)
@@ -68,14 +68,14 @@ gltfLoader.load('./assets/flylight/model/flyLight.glb', gltf => {
 			y: 2 * Math.PI,
 			duration: 10 + Math.random() * 30,
 			repeat: -1,
-		});
+		})
 		gsap.to(flyLight.position, {
-			x: "+=" + Math.random() * 5,
-			y: "+=" + Math.random() * 20,
+			x: '+=' + Math.random() * 5,
+			y: '+=' + Math.random() * 20,
 			yoyo: true,
 			duration: 5 + Math.random() * 10,
 			repeat: -1,
-		});
+		})
 		scene.add(flyLight)
 	}
 })
