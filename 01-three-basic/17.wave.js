@@ -32,24 +32,152 @@ const axesHelper = new THREE.AxesHelper(5)
 scene.add(axesHelper)
 
 const params = {
-	uWavesFrequency: 30.0, // 波纹频率
-	uScale: 0.1, // 波纹高度缩放值
-}
+  uWaresFrequency: 14, // 波纹频率
+  uScale: 0.03, // 波纹高度缩放值
+  uXzScale: 1.5,
+  uNoiseFrequency: 10,
+  uNoiseScale: 1.5,
+  uLowColor: "#ff0000",
+  uHighColor: "#ffff00",
+  uXspeed: 1,
+  uZspeed: 1,
+  uNoiseSpeed: 1,
+  uOpacity: 1,
+};
 
-// 着色器抽取成文件
 const shaderMaterial = new THREE.ShaderMaterial({
-	vertexShader: waveVertexShader,
-	fragmentShader: waveFragmentShader,
-	side: THREE.DoubleSide,
-	uniforms: {
-		uWavesFrequency: {
-			value: params.uWavesFrequency,
-		},
-		uScale: {
-			value: params.uScale,
-		},
-	},
-})
+  vertexShader: waveVertexShader,
+  fragmentShader: waveFragmentShader,
+  side: THREE.DoubleSide,
+  uniforms: {
+    uWaresFrequency: {
+      value: params.uWaresFrequency,
+    },
+    uScale: {
+      value: params.uScale,
+    },
+    uNoiseFrequency: {
+      value: params.uNoiseFrequency,
+    },
+    uNoiseScale: {
+      value: params.uNoiseScale,
+    },
+    uXzScale: {
+      value: params.uXzScale,
+    },
+    uTime: {
+      value: params.uTime,
+    },
+    uLowColor: {
+      value: new THREE.Color(params.uLowColor),
+    },
+    uHighColor: {
+      value: new THREE.Color(params.uHighColor),
+    },
+    uXspeed: {
+      value: params.uXspeed,
+    },
+    uZspeed: {
+      value: params.uZspeed,
+    },
+    uNoiseSpeed: {
+      value: params.uNoiseSpeed,
+    },
+    uOpacity: {
+      value: params.uOpacity,
+    },
+  },
+  transparent: true,
+});
+
+gui
+  .add(params, "uWaresFrequency")
+  .min(1)
+  .max(100)
+  .step(0.1)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uWaresFrequency.value = value;
+  });
+
+gui
+  .add(params, "uScale")
+  .min(0)
+  .max(0.2)
+  .step(0.001)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uScale.value = value;
+  });
+
+gui
+  .add(params, "uNoiseFrequency")
+  .min(1)
+  .max(100)
+  .step(0.1)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uNoiseFrequency.value = value;
+  });
+
+gui
+  .add(params, "uNoiseScale")
+  .min(0)
+  .max(5)
+  .step(0.001)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uNoiseScale.value = value;
+  });
+
+gui
+  .add(params, "uXzScale")
+  .min(0)
+  .max(5)
+  .step(0.1)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uXzScale.value = value;
+  });
+
+gui.addColor(params, "uLowColor").onFinishChange((value) => {
+  shaderMaterial.uniforms.uLowColor.value = new THREE.Color(value);
+});
+gui.addColor(params, "uHighColor").onFinishChange((value) => {
+  shaderMaterial.uniforms.uHighColor.value = new THREE.Color(value);
+});
+
+gui
+  .add(params, "uXspeed")
+  .min(0)
+  .max(5)
+  .step(0.001)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uXspeed.value = value;
+  });
+
+gui
+  .add(params, "uZspeed")
+  .min(0)
+  .max(5)
+  .step(0.001)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uZspeed.value = value;
+  });
+
+gui
+  .add(params, "uNoiseSpeed")
+  .min(0)
+  .max(5)
+  .step(0.001)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uNoiseSpeed.value = value;
+  });
+
+gui
+  .add(params, "uOpacity")
+  .min(0)
+  .max(1)
+  .step(0.01)
+  .onChange((value) => {
+    shaderMaterial.uniforms.uOpacity.value = value;
+  });
+
 
 // 创建平面
 const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 64), shaderMaterial)
@@ -58,23 +186,6 @@ plane.rotation.x = -Math.PI / 2
 console.log(plane)
 scene.add(plane)
 
-gui
-	.add(params, 'uWavesFrequency')
-	.min(1)
-	.max(100)
-	.step(0.1)
-	.onChange(value => {
-		shaderMaterial.uniforms.uWavesFrequency.value = value
-	})
-
-gui
-	.add(params, 'uScale')
-	.min(0)
-	.max(0.2)
-	.step(0.001)
-	.onChange(value => {
-		shaderMaterial.uniforms.uScale.value = value
-	})
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer({ alpha: true })
 
@@ -109,6 +220,7 @@ const clock = new THREE.Clock()
 function animate(t) {
 	const elapsedTime = clock.getElapsedTime()
 	//   console.log(elapsedTime);
+	shaderMaterial.uniforms.uTime.value = elapsedTime
 	requestAnimationFrame(animate)
 	// 使用渲染器渲染相机看这个场景的内容渲染出来
 	renderer.render(scene, camera)
