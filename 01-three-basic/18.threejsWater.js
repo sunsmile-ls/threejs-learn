@@ -53,15 +53,15 @@ gltfLoader.load('./textures/threejsWater/model/yugang.glb', gltf => {
 	scene.add(water)
 	scene.add(gltf.scene)
 })
-// 创建水平面平面
-const water = new Water(new THREE.PlaneGeometry(1, 1, 64, 64), {
-	flowDirection: new THREE.Vector2(1, 1),
-	textureHeight: 1024,
-	textureWidth: 1024,
-})
-water.rotation.x = -Math.PI / 2
-console.log(water)
-scene.add(water)
+// // 创建水平面平面
+// const water = new Water(new THREE.PlaneGeometry(1, 1, 64, 64), {
+// 	flowDirection: new THREE.Vector2(1, 1),
+// 	textureHeight: 1024,
+// 	textureWidth: 1024,
+// })
+// water.rotation.x = -Math.PI / 2
+// console.log(water)
+// scene.add(water)
 
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer({ alpha: true })

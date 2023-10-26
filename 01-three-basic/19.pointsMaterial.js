@@ -115,9 +115,9 @@ const generateGalaxy = () => {
 	material = new THREE.ShaderMaterial({
 		vertexShader,
 		fragmentShader,
-		sizeAttenuation: true,
-		vertexColors: true, // 传递 color 为 片元着色器
-		depthWrite: false,
+		sizeAttenuation: true, // 相机深度而衰减
+		vertexColors: true, // 传递 color 给着色器
+		depthWrite: false, // 禁用重叠的影响
 		blending: THREE.AdditiveBlending,
 		uniforms: {
 			uTexture: {
