@@ -3,8 +3,14 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import * as dat from 'dat.gui'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass'
+import { GlitchPass } from 'three/addons/postprocessing/GlitchPass'
+import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass"
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
 // 目标：掌握设置环境纹理(为什么阴影不跟着动？)
 
@@ -71,6 +77,28 @@ const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.shadowMap.enabled = true
 
+// 合成效果
+const effectComposer = new EffectComposer(renderer)
+effectComposer.setSize(window.innerWidth, window.innerHeight)
+
+// 添加渲染通道
+const renderPass = new RenderPass(scene, camera)
+effectComposer.addPass(renderPass)
+
+// 故障通道
+const glitchPass = new GlitchPass()
+glitchPass.enabled = false
+effectComposer.addPass(glitchPass)
+
+// 抗锯齿
+const sMAAPass = new SMAAPass()
+sMAAPass.enabled = false
+effectComposer.addPass(sMAAPass)
+
+// 发光效果
+const unrealBloomPass = new UnrealBloomPass()
+effectComposer.addPass(unrealBloomPass)
+
 // 监听屏幕大小改变的变化，设置渲染的尺寸
 window.addEventListener('resize', () => {
 	//   console.log("resize");
@@ -81,6 +109,7 @@ window.addEventListener('resize', () => {
 
 	//   更新渲染器
 	renderer.setSize(window.innerWidth, window.innerHeight)
+	effectComposer.setSize(window.innerWidth, window.innerHeight);
 	//   设置渲染器的像素比例
 	renderer.setPixelRatio(window.devicePixelRatio)
 })
@@ -102,7 +131,8 @@ function animate(t) {
 	customUniforms.uTime.value = time
 	requestAnimationFrame(animate)
 	// 使用渲染器渲染相机看这个场景的内容渲染出来
-	renderer.render(scene, camera)
+	// renderer.render(scene, camera)
+	effectComposer.render()
 }
 
 animate()
