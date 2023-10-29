@@ -6,18 +6,17 @@ import * as dat from 'dat.gui'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer'
-import { RenderPass } from 'three/addons/postprocessing/RenderPass'
-import { GlitchPass } from 'three/addons/postprocessing/GlitchPass'
-import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass"
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
-// 目标：掌握设置环境纹理(为什么阴影不跟着动？)
+// 目标：掌握设置环境纹理
 
 //创建gui对象
 const gui = new dat.GUI()
 
-// console.log(THREE);
 // 初始化场景
 const scene = new THREE.Scene()
 
@@ -99,9 +98,19 @@ effectComposer.addPass(sMAAPass)
 const unrealBloomPass = new UnrealBloomPass()
 effectComposer.addPass(unrealBloomPass)
 
+renderer.toneMapping = THREE.ACESFilmicToneMapping // 色调映射
+renderer.toneMappingExposure = 1 // 色调曝光级别
+unrealBloomPass.strength = 1 // 泛光的强度
+unrealBloomPass.radius = 0 // 泛光散发的半径
+unrealBloomPass.threshold = 1 // 泛光的光照强度阈值
+
+gui.add(renderer, 'toneMappingExposure').min(0).max(2).step(0.01)
+gui.add(unrealBloomPass, 'strength').min(0).max(2).step(0.01)
+gui.add(unrealBloomPass, 'radius').min(0).max(2).step(0.01)
+gui.add(unrealBloomPass, 'threshold').min(0).max(2).step(0.01)
+
 // 监听屏幕大小改变的变化，设置渲染的尺寸
 window.addEventListener('resize', () => {
-	//   console.log("resize");
 	// 更新摄像头
 	camera.aspect = window.innerWidth / window.innerHeight
 	//   更新摄像机的投影矩阵
@@ -109,7 +118,7 @@ window.addEventListener('resize', () => {
 
 	//   更新渲染器
 	renderer.setSize(window.innerWidth, window.innerHeight)
-	effectComposer.setSize(window.innerWidth, window.innerHeight);
+	effectComposer.setSize(window.innerWidth, window.innerHeight)
 	//   设置渲染器的像素比例
 	renderer.setPixelRatio(window.devicePixelRatio)
 })
@@ -122,7 +131,6 @@ const controls = new OrbitControls(camera, renderer.domElement)
 // 设置控制器阻尼
 controls.enableDamping = true
 // 设置自动旋转
-// controls.autoRotate = true;
 
 const clock = new THREE.Clock()
 function animate(t) {
@@ -136,3 +144,4 @@ function animate(t) {
 }
 
 animate()
+
