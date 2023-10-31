@@ -1,11 +1,11 @@
 {
-  "name": "threeapp",
+  "name": "02-three-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,8 +13,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vue-tsc": "^1.8.5"
+    "vite": "^4.4.5"
   }
 }
