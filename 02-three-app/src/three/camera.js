@@ -1,9 +1,14 @@
 import * as THREE from 'three'
 
-// 创建透视相机
-const camera = new THREE.PerspectiveCamera(90, window.innerHeight / window.innerHeight, 0.1, 1000)
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerHeight / window.innerHeight,
+  1,
+  50000
+);
 // 设置相机位置
-camera.position.set(5, 5, 5)
+// object3d具有position，属性是1个3维的向量
+camera.position.set(5, 10, 15);
 // 更新摄像头
 camera.aspect = window.innerWidth / window.innerHeight
 //   更新摄像机的投影矩阵
